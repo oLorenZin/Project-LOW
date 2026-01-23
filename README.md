@@ -67,3 +67,10 @@ Clique com o botão direito no arquivo Project_LOW.bat.
 Selecione "Executar como Administrador" (Necessário para aplicar alterações no sistema).
 
 Siga as instruções na tela. Recomenda-se começar pela Opção 1 (Ponto de Restauração).
+
+## ⚠️ Aviso Legal
+Este software altera configurações do Registro do Windows e serviços do sistema. Embora tenha sido testado exaustivamente e inclua a criação de Pontos de Restauração:
+
+Use por sua conta e risco.
+
+Sempre faça um backup de seus dados importantes antes de executar ferramentas de otimização.
