@@ -55,3 +55,14 @@ O LOW oferece 19 módulos principais organizados em um grid de fácil acesso:
   [7] Energia e SSD                [14] Teste Speedtest             
 
   [i] Informacoes / Sobre                                             [0] Sair
+
+🚀 Como Usar
+Não é necessário instalar nada. O script é "Portable".
+
+Baixe o arquivo .bat da última release ou clique em Code > Download ZIP.
+
+Clique com o botão direito no arquivo LOW_Otimizador.bat.
+
+Selecione "Executar como Administrador" (Necessário para aplicar alterações no sistema).
+
+Siga as instruções na tela. Recomenda-se começar pela Opção 1 (Ponto de Restauração).
