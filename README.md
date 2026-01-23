@@ -62,7 +62,7 @@ Não é necessário instalar nada. O script é "Portable".
 
 Baixe o arquivo .bat da última release ou clique em Code > Download ZIP.
 
-Clique com o botão direito no arquivo LOW_Otimizador.bat.
+Clique com o botão direito no arquivo Project_LOW.bat.
 
 Selecione "Executar como Administrador" (Necessário para aplicar alterações no sistema).
 
