@@ -74,3 +74,7 @@ Este software altera configurações do Registro do Windows e serviços do siste
 Use por sua conta e risco.
 
 Sempre faça um backup de seus dados importantes antes de executar ferramentas de otimização.
+
+## ​🤝 Contribuição
+​Sinta-se à vontade para fazer um Fork deste projeto, sugerir melhorias via Issues ou enviar um Pull Request.
+​Desenvolvido com 💚 e ☕.
