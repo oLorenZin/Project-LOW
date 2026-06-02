@@ -3,7 +3,7 @@
 ![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue?style=for-the-badge&logo=windows)
 ![Language](https://img.shields.io/badge/Language-Batch%20%7C%20PowerShell-green?style=for-the-badge&logo=powershell)
 ![License](https://img.shields.io/badge/License-Open%20Source-orange?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-3.9.0%20(Alien%20Edition)-brightgreen?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-3.9.0%20-brightgreen?style=for-the-badge)
 
 **LOW** é uma suíte de manutenção e otimização "All-in-One" escrita nativamente em Batch e PowerShell. Desenvolvido para gamers, power users e técnicos que desejam extrair o máximo de desempenho do hardware sem instalar softwares pesados de terceiros.
 
