@@ -2,6 +2,14 @@
 :: --- PARTE BATCH (INICIADOR) ---
 :: Define o caminho do script numa variavel de ambiente para o PowerShell ler
 SET "SCRIPT_PATH=%~f0"
+SET "DRY_RUN=0"
+SET "FAST_MODE=0"
+
+:: Parse de argumentos para suportar --dry-run e --fast
+for %%I in (%*) do (
+    if /I "%%~I"=="--dry-run" SET "DRY_RUN=1"
+    if /I "%%~I"=="--fast" SET "FAST_MODE=1"
+)
 
 :: Verifica se tem permissão de Administrador
 net session >nul 2>&1
@@ -11,12 +19,34 @@ if %errorLevel% neq 0 (
     exit /b
 )
 
-:: Configura o local e executa o código PowerShell abaixo (pula as primeiras 19 linhas)
+:: Configura o local e executa o código PowerShell abaixo
 cd /d "%~dp0"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-Content '%~f0' | Select-Object -Skip 19 | Out-String | Invoke-Expression"
+SET "LOG_DIR=%USERPROFILE%\Desktop\LOW_Logs"
+for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "(Get-Date).ToString('yyyyMMdd_HHmmss')"`) do set "TIMESTAMP=%%T"
+SET "LOG_FILE=%LOG_DIR%\LOW_%TIMESTAMP%.log"
+if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
+(
+    echo.
+    echo ====== PROJECT-LOW - SESSION LOG ======
+    echo Data/Hora: %date% %time%
+    echo Usuario: %USERNAME%
+    echo Computador: %COMPUTERNAME%
+    echo ============================================
+) >> "%LOG_FILE%"
+
+set "PS_START="
+for /f "usebackq tokens=1 delims=:" %%L in (`findstr /n /c:"# POWERSHELL CODE BEGINS BELOW" "%~f0"`) do set "PS_START=%%L"
+if not defined PS_START (
+    echo [!] Nao foi possivel localizar o inicio do bloco PowerShell.
+    exit /b 1
+)
+set /a PS_START+=1
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-Content '%~f0' | Select-Object -Skip %PS_START% | Out-String | Invoke-Expression"
 exit /b
 :: ---------------------------------------------------------
-:: --- ABAIXO COMEÇA O SCRIPT POWERSHELL (NÃO MEXA ACIMA) ---
+# POWERSHELL CODE BEGINS BELOW
+# --- ABAIXO COMEÇA O SCRIPT POWERSHELL (NÃO MEXA ACIMA) ---
 
 # --- CONFIGURAÇÕES GERAIS ---
 $Version = "3.7.0 (Professional)"
