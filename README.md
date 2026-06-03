@@ -1,4 +1,3 @@
-```markdown
 # 🚀 LOW - Limpeza e Otimizador do Windows
 
 ![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue?style=for-the-badge&logo=windows)
