@@ -70,8 +70,8 @@ O LOW oferece 20 módulos principais e comandos inteligentes organizados num pai
 ⚡ Execução Rápida (sem download)
 A forma mais rápida de testar o LOW. Abra o CMD como Administrador, cole o comando abaixo e prima Enter:
 
-PowerShell
 powershell -ExecutionPolicy Bypass -Command "iwr '[https://raw.githubusercontent.com/oLorenZin/Project-LOW/main/project_low.bat](https://raw.githubusercontent.com/oLorenZin/Project-LOW/main/project_low.bat)' -OutFile '$env:TEMP\low.bat'; Start-Process '$env:TEMP\low.bat' -Verb RunAs"
+
 🚀 Como Usar (Manual)
 Caso prefira transferir o ficheiro e mantê-lo no seu computador (O script é 100% "Portable"):
 
