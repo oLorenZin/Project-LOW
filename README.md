@@ -64,6 +64,7 @@ O LOW oferece 20 módulos principais e comandos inteligentes organizados num pai
 
   [i] Sobre   [L] Logs   [D] Dry-Run   [99] QUICK OPTIMIZE   [0] Sair
  --------------------------------------------------------------------------------
+```
 
  > Digite sua(s) opcao(oes) separadas por virgula (ex: 1,3,10):
 ⚡ Execução Rápida (sem download)
