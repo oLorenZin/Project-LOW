@@ -17,7 +17,7 @@ exit /b
 # POWERSHELL_CODE
 
 # --- CONFIGURAÇÕES GERAIS ---
-$Version = "4.2.1 (Refined & Bulletproof)"
+$Version = "4.3.0 (Process Booster)"
 $host.UI.RawUI.BackgroundColor = "Black"
 $host.UI.RawUI.ForegroundColor = "Green"
 Clear-Host
@@ -796,6 +796,52 @@ function Menu-RegeditUltimate {
     Read-Host " Enter..."
 }
 
+function Menu-PrioridadeProcesso {
+    Write-Host "`n [20] PRIORIDADE E AFINIDADE DE PROCESSO" -ForegroundColor Green
+    Write-Info "Ajusta prioridade (High) e isola o Core 0 do Windows." "Set-Process"
+    
+    Write-Host " [!] DICA: Escreva apenas o nome do jogo/programa (ex: cs2, valorant, chrome)." -ForegroundColor Yellow
+    $procName = Read-Host " > Processo ou [0] para Voltar"
+    
+    if ($procName -eq "0" -or [string]::IsNullOrWhiteSpace($procName)) { return }
+    
+    # Remove .exe caso o usuario tenha digitado
+    $procName = $procName.Replace(".exe", "")
+    
+    $processList = Get-Process -Name $procName -ErrorAction SilentlyContinue
+    
+    if (-not $processList) {
+        Write-Host " [X] PROCESSO NAO ENCONTRADO: O jogo ou programa precisa estar aberto!" -ForegroundColor Red
+    } else {
+        foreach ($p in $processList) {
+            if ($global:DryRun) { 
+                Write-Host " [SIMULACAO] Alteraria '$($p.ProcessName)' para Prioridade ALTA e removeria Core 0." -ForegroundColor Cyan
+                continue 
+            }
+            try {
+                # 1. Definir Prioridade para High
+                $p.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::High
+                
+                # 2. Definir Afinidade (Isolar Core 0)
+                $cores = [Environment]::ProcessorCount
+                # Cria uma mascara com todos os cores ativados
+                $mask = (1 -shl $cores) - 1
+                # Se tiver mais de 2 cores, desativa o Core 0 (subtraindo 1)
+                if ($cores -gt 2) { $mask = $mask -bxor 1 }
+                
+                $p.ProcessorAffinity = [System.IntPtr]$mask
+                
+                Write-Host " [OK] $($p.ProcessName) (PID: $($p.Id)) -> Prioridade ALTA | Affinity isolada." -ForegroundColor Green
+                Write-Log "Processo $($p.ProcessName) otimizado: High Priority, Affinity Mask: $mask"
+            } catch {
+                Write-Host " [X] ERRO ao modificar $($p.ProcessName). Acesso Negado pelo Anti-Cheat ou Sistema." -ForegroundColor Red
+                Write-Log "Erro ao modificar processo $($p.ProcessName)." "ERRO"
+            }
+        }
+    }
+    Read-Host " Enter..."
+}
+
 function Quick-Optimize {
     Write-Host "`n [99] QUICK OPTIMIZE INICIADO..." -ForegroundColor Magenta
     Write-Log "Quick Optimize acionado pelo usuario."
@@ -923,7 +969,7 @@ Do {
     Write-MenuRow "[3] Otimizar Visual (FPS)"   "[10] Limpeza Profunda"        "[17] Backup Pessoal"
     Write-MenuRow "[4] Privacidade e GPO"       "[11] Desativar Diagnosis"     "[18] Wi-Fi Keys"
     Write-MenuRow "[5] Debloat (Apps)"          "[12] Seguranca e Reparo"      "[19] Regedit (Avancado)"
-    Write-MenuRow "[6] Atualizar (Winget)"      "[13] Desativar HPET"          ""
+    Write-MenuRow "[6] Atualizar (Winget)"      "[13] Desativar HPET"          "[20] Prioridade Processo"
     Write-MenuRow "[7] Energia e SSD"           "[14] Teste Speedtest"         ""
     
     Write-Host ""
@@ -956,16 +1002,17 @@ Do {
             "17" { Menu-BackupFiles }
             "18" { Menu-WifiKeys }
             "19" { Menu-RegeditUltimate }
+            "20" { Menu-PrioridadeProcesso }
             "99" { Quick-Optimize }
             "nota" { Menu-NotasSecretas }
-            "i" { Menu-Info }
-            "d" { 
+            "i", "I" { Menu-Info }
+            "d", "D" { 
                 $global:DryRun = -not $global:DryRun
                 if ($global:DryRun) { Write-Host "`n [!] MODO SIMULACAO ATIVADO! (Dry-Run)" -ForegroundColor Cyan }
                 else { Write-Host "`n [!] MODO SIMULACAO DESATIVADO!" -ForegroundColor Yellow }
                 Start-Sleep -s 1
             }
-            "l" { 
+            "l", "L" { 
                 Clear-Host
                 Draw-Line
                 Write-Host "                  LOGS DA SESSAO ATUAL                      " -ForegroundColor White
