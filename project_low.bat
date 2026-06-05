@@ -17,7 +17,7 @@ exit /b
 # POWERSHELL_CODE
 
 # --- CONFIGURAÇÕES GERAIS ---
-$Version = "4.3.0 (Process Booster)"
+$Version = "4.3.1 (Process Booster & Stable)"
 $host.UI.RawUI.BackgroundColor = "Black"
 $host.UI.RawUI.ForegroundColor = "Green"
 Clear-Host
@@ -805,9 +805,7 @@ function Menu-PrioridadeProcesso {
     
     if ($procName -eq "0" -or [string]::IsNullOrWhiteSpace($procName)) { return }
     
-    # Remove .exe caso o usuario tenha digitado
     $procName = $procName.Replace(".exe", "")
-    
     $processList = Get-Process -Name $procName -ErrorAction SilentlyContinue
     
     if (-not $processList) {
@@ -819,18 +817,11 @@ function Menu-PrioridadeProcesso {
                 continue 
             }
             try {
-                # 1. Definir Prioridade para High
                 $p.PriorityClass = [System.Diagnostics.ProcessPriorityClass]::High
-                
-                # 2. Definir Afinidade (Isolar Core 0)
                 $cores = [Environment]::ProcessorCount
-                # Cria uma mascara com todos os cores ativados
                 $mask = (1 -shl $cores) - 1
-                # Se tiver mais de 2 cores, desativa o Core 0 (subtraindo 1)
                 if ($cores -gt 2) { $mask = $mask -bxor 1 }
-                
                 $p.ProcessorAffinity = [System.IntPtr]$mask
-                
                 Write-Host " [OK] $($p.ProcessName) (PID: $($p.Id)) -> Prioridade ALTA | Affinity isolada." -ForegroundColor Green
                 Write-Log "Processo $($p.ProcessName) otimizado: High Priority, Affinity Mask: $mask"
             } catch {
@@ -1005,14 +996,14 @@ Do {
             "20" { Menu-PrioridadeProcesso }
             "99" { Quick-Optimize }
             "nota" { Menu-NotasSecretas }
-            "i", "I" { Menu-Info }
-            "d", "D" { 
+            "i" { Menu-Info }
+            "d" { 
                 $global:DryRun = -not $global:DryRun
                 if ($global:DryRun) { Write-Host "`n [!] MODO SIMULACAO ATIVADO! (Dry-Run)" -ForegroundColor Cyan }
                 else { Write-Host "`n [!] MODO SIMULACAO DESATIVADO!" -ForegroundColor Yellow }
                 Start-Sleep -s 1
             }
-            "l", "L" { 
+            "l" { 
                 Clear-Host
                 Draw-Line
                 Write-Host "                  LOGS DA SESSAO ATUAL                      " -ForegroundColor White
