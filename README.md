@@ -7,7 +7,7 @@
 
 **LOW** é uma suíte de manutenção e otimização "All-in-One" escrita nativamente com uma arquitetura híbrida (Batch como iniciador blindado + PowerShell para a lógica). Foi desenvolvido para gamers, power users e técnicos que desejam extrair o máximo de desempenho do hardware de forma segura, sem precisar instalar software pesado de terceiros.
 
-O script opera com uma interface CLI ao estilo "Hacker/Alien", contando com recursos de simulação, execução em lote e monitoramento de hardware em tempo real.
+O script opera com uma interface CLI ao estilo "Hacker", contando com recursos de simulação, execução em lote e monitoramento de hardware em tempo real.
 
 ---
 
