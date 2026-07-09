@@ -1296,28 +1296,17 @@ Do {
     
     Draw-Line
     Write-Host ""
-    
-    Write-Host ""
-    Write-Host "  -- DESEMPENHO -------------------------------------------------------------" -ForegroundColor DarkGreen
-    Write-MenuRow "[3] Otimizar Visual (FPS)"   "[7] Energia e SSD"            "[9] Perifericos (Input Lag)"
-    Write-MenuRow "[13] Desativar HPET"         "[15] Boot Rapido"             "[20] Prioridade Processo"
-    Write-MenuRow "[26] Teste Estabilidade"     ""                             ""
 
-    Write-Host ""
-    Write-Host "  -- REDE -------------------------------------------------------------------" -ForegroundColor DarkGreen
-    Write-MenuRow "[8] Otimizar Rede (Ping)"    "[14] Teste Speedtest"         "[18] Wi-Fi Keys"
+    Write-MenuRow "[1] Criar Ponto Restauracao" "[8] Otimizar Rede (Ping)"     "[15] Boot Rapido"
+    Write-MenuRow "[2] Desativar Servicos"      "[9] Perifericos (Input Lag)"  "[16] System Scanner"
+    Write-MenuRow "[3] Otimizar Visual (FPS)"   "[10] Limpeza Profunda"        "[17] Backup Pessoal"
+    Write-MenuRow "[4] Privacidade e GPO"       "[11] Desativar Diagnosis"     "[18] Wi-Fi Keys"
+    Write-MenuRow "[5] Debloat (Apps)"          "[12] Seguranca e Reparo"      "[19] Regedit (Avancado)"
+    Write-MenuRow "[6] Atualizar (Winget)"      "[13] Desativar HPET"          "[20] Prioridade Processo"
+    Write-MenuRow "[7] Energia e SSD"           "[14] Teste Speedtest"         "[21] Disco (SMART)"
+    Write-MenuRow "[22] Teste de RAM"           "[24] Relatorio Hardware"      "[26] Teste Estabilidade"
+    Write-MenuRow "[28] Exportar Sessao"        ""                             ""
 
-    Write-Host ""
-    Write-Host "  -- MANUTENCAO & DIAGNOSTICO -----------------------------------------------" -ForegroundColor DarkGreen
-    Write-MenuRow "[5] Debloat (Apps)"          "[6] Atualizar (Winget)"       "[10] Limpeza Profunda"
-    Write-MenuRow "[12] Seguranca e Reparo"     "[16] System Scanner"          "[17] Backup Pessoal"
-    Write-MenuRow "[21] Disco (SMART)"          "[22] Teste de RAM"            "[24] Relatorio Hardware"
-
-    Write-Host ""
-    Write-Host "  -- SISTEMA & AVANCADO -----------------------------------------------------" -ForegroundColor DarkGreen
-    Write-MenuRow "[1] Criar Ponto Restauracao" "[2] Desativar Servicos"       "[4] Privacidade e GPO"
-    Write-MenuRow "[11] Desativar Diagnosis"    "[19] Regedit (Avancado)"      "[28] Exportar Sessao"
-    
     Write-Host ""
     Write-Host "  $([char]27)[32m[$([char]27)[97mi$([char]27)[32m] $([char]27)[92mSobre   $([char]27)[32m[$([char]27)[97mL$([char]27)[32m] $([char]27)[92mLogs   $([char]27)[32m[$([char]27)[97mD$([char]27)[32m] $([char]27)[92mDry-Run   $([char]27)[32m[$([char]27)[97m99$([char]27)[32m] $([char]27)[92mQUICK OPTIMIZE   $([char]27)[32m[$([char]27)[97m0$([char]27)[32m] $([char]27)[92mSair"
     Draw-Line
