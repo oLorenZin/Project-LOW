@@ -222,7 +222,6 @@ function Menu-Restauracao {
         $desc = "Otimizacao_Lorenzo_" + (Get-Date -Format "yyyyMMdd_HHmm")
         Write-Log "Criando Ponto de Restauracao..."
         Try { Enable-ComputerRestore -Drive "C:\" -ErrorAction SilentlyContinue; Checkpoint-Computer -Description $desc -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop; Write-Host " SUCESSO!" -ForegroundColor Green; Write-Log "Ponto criado com sucesso."; $global:AppliedOptions["1"] = $true } Catch { Write-Host " AVISO: Falha ao criar ponto." -ForegroundColor Yellow; Write-Log "Erro ao criar ponto." "ERRO" }
-        Read-Host " Enter..."
     }
 }
 
@@ -266,7 +265,6 @@ function Menu-Servicos {
         }
         if (-not $global:DryRun) { $global:AppliedOptions["2"] = $false }
     }
-    Read-Host " Enter..."
 }
 
 function Menu-Visual {
@@ -296,7 +294,7 @@ function Menu-Visual {
         Write-Host " Visual Restaurado." -ForegroundColor DarkGray; $exec = $true
         if (-not $global:DryRun) { $global:AppliedOptions["3"] = $false }
     }
-    if ($exec -and (-not $global:DryRun)) { Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue }; Read-Host " Enter..."
+    if ($exec -and (-not $global:DryRun)) { Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue }
 }
 
 function Aplicar-GPO-Custom {
@@ -315,14 +313,14 @@ function Aplicar-GPO-Custom {
         Set-Reg "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" "NoAutoUpdate" 0
         Set-Reg "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent" "DisableWindowsConsumerFeatures" 1
         Set-Reg "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" "LetAppsRunInBackground" 2
-        Write-Host " [OK] Aplicado." -ForegroundColor Green; $global:AppliedOptions["4"] = $true; Read-Host " Enter..."
+        Write-Host " [OK] Aplicado." -ForegroundColor Green; $global:AppliedOptions["4"] = $true
     } elseif ($sub -eq "2") {
         Write-Log "Restaurando Telemetria."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Reverteria GPOs." -ForegroundColor Cyan; return }
         Remove-ItemProperty "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" "AllowTelemetry" -ErrorAction SilentlyContinue
         Remove-ItemProperty "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" "AllowGameDVR" -ErrorAction SilentlyContinue
         Set-Reg "HKCU:\System\GameConfigStore" "GameDVR_Enabled" 1
-        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["4"] = $false; Read-Host " Enter..."
+        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["4"] = $false
     }
 }
 
@@ -341,13 +339,12 @@ function Remover-AppsInuteis {
             Write-Host " [-] Removendo: $app" -ForegroundColor DarkGreen
             Get-AppxPackage $app -AllUsers | Remove-AppxPackage -ErrorAction SilentlyContinue 
         }
-        Write-Host " Concluido." -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["5"] = $true }; Read-Host " Enter..."
+        Write-Host " Concluido." -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["5"] = $true }
     } elseif ($sub -eq "2") {
         Write-Log "Reinstalando Bloatware."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Reinstalaria Apps nativos." -ForegroundColor Cyan; return }
         Write-Host " Reinstalando..." -ForegroundColor Yellow
         Get-AppxPackage -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml" -ErrorAction SilentlyContinue}
-        Read-Host " Enter..."
     }
 }
 
@@ -361,14 +358,14 @@ function Atualizar-Programas {
     if ($sub -eq "1") { 
         Write-Log "Atualizando programas (Winget)."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Executaria winget upgrade --all" -ForegroundColor Cyan; return }
-        winget upgrade --all --include-unknown --accept-source-agreements --accept-package-agreements; $global:AppliedOptions["6"] = $true; Read-Host " Enter..." 
+        winget upgrade --all --include-unknown --accept-source-agreements --accept-package-agreements; $global:AppliedOptions["6"] = $true
     } elseif ($sub -eq "2") {
         Write-Log "Instalando Visual C++."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Instalaria Microsoft.VCRedist" -ForegroundColor Cyan; return }
         Write-Host " [-] Instalando Visual C++..." -ForegroundColor DarkGreen
         winget install --id Microsoft.VCRedist.2015+.x64 --accept-source-agreements --accept-package-agreements
         winget install --id Microsoft.VCRedist.2015+.x86 --accept-source-agreements --accept-package-agreements
-        Write-Host " [OK] Instalado." -ForegroundColor Green; Read-Host " Enter..."
+        Write-Host " [OK] Instalado." -ForegroundColor Green
     }
 }
 
@@ -385,13 +382,13 @@ function Otimizar-Energia {
         powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 2>$null | Out-Null; powercfg -setactive e9a42b02-d5df-448d-aa00-03f14749eb61 2>$null
         powercfg -h off; fsutil behavior set disable8dot3 1 | Out-Null; fsutil behavior set disablelastaccess 1 | Out-Null
         bcdedit /set disabledynamictick yes | Out-Null; bcdedit /set useplatformtick yes | Out-Null
-        Write-Host " [OK] Otimizado." -ForegroundColor Green; $global:AppliedOptions["7"] = $true; Read-Host " Enter..."
+        Write-Host " [OK] Otimizado." -ForegroundColor Green; $global:AppliedOptions["7"] = $true
     } elseif ($sub -eq "2") {
         Write-Log "Revertendo Energia para Padrao."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Reverteria Plano de Energia e 8dot3." -ForegroundColor Cyan; return }
         powercfg -setactive 381b4222-f694-41f0-9685-ff5bb260df2e; powercfg -h on; fsutil behavior set disable8dot3 0 | Out-Null
         bcdedit /deletevalue disabledynamictick | Out-Null
-        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["7"] = $false; Read-Host " Enter..."
+        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["7"] = $false
     }
 }
 
@@ -414,7 +411,7 @@ function Otimizar-Rede {
             $interfaces = Get-ChildItem $PathTCP -ErrorAction SilentlyContinue
             foreach ($iface in $interfaces) { Set-ItemProperty $iface.PSPath "TcpAckFrequency" 1 -Type DWord -ErrorAction SilentlyContinue; Set-ItemProperty $iface.PSPath "TCPNoDelay" 1 -Type DWord -ErrorAction SilentlyContinue }
         }
-        Write-Host " [OK] Rede Otimizada." -ForegroundColor Green; $global:AppliedOptions["8"] = $true; Read-Host " Enter..."
+        Write-Host " [OK] Rede Otimizada." -ForegroundColor Green; $global:AppliedOptions["8"] = $true
     } elseif ($sub -eq "2") {
         Write-Host "`n      [1] Cloudflare (1.1.1.1) - Gamer"
         Write-Host "      [2] Google (8.8.8.8)"
@@ -426,12 +423,11 @@ function Otimizar-Rede {
         elseif ($dns -eq "2") { Set-DnsClientServerAddress -InterfaceIndex $Adapters.InterfaceIndex -ServerAddresses ("8.8.8.8","8.8.4.4"); Write-Host " [OK] Google." -ForegroundColor Green; Write-Log "DNS Alterado: Google" }
         elseif ($dns -eq "3") { Set-DnsClientServerAddress -InterfaceIndex $Adapters.InterfaceIndex -ResetServerAddresses; Write-Host " [OK] DHCP." -ForegroundColor Yellow; Write-Log "DNS Alterado: DHCP" }
         cmd /c "ipconfig /flushdns" | Out-Null
-        Read-Host " Enter..."
     } elseif ($sub -eq "3") {
         Write-Log "Revertendo Rede para Padrao."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Removeria ThrottleIndex." -ForegroundColor Cyan; return }
         Remove-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" "NetworkThrottlingIndex" -ErrorAction SilentlyContinue
-        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["8"] = $false; Read-Host " Enter..."
+        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["8"] = $false
     }
 }
 
@@ -449,13 +445,13 @@ function Otimizar-Perifericos {
         Set-Reg "HKCU:\Control Panel\Keyboard" "KeyboardDelay" "0" "String"
         Set-Reg "HKCU:\Control Panel\Keyboard" "KeyboardSpeed" "31" "String"
         Set-Reg "HKCU:\Control Panel\Accessibility\StickyKeys" "Flags" "506" "String"
-        Write-Host " [OK] Aplicado." -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["9"] = $true }; Read-Host " Enter..."
+        Write-Host " [OK] Aplicado." -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["9"] = $true }
     } elseif ($sub -eq "2") {
         Write-Log "Restaurando Mouse e Teclado."
         Set-Reg "HKCU:\Control Panel\Mouse" "MouseSpeed" "1" "String"
         Set-Reg "HKCU:\Control Panel\Keyboard" "KeyboardDelay" "1" "String"
         Set-Reg "HKCU:\Control Panel\Accessibility\StickyKeys" "Flags" "510" "String"
-        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; if (-not $global:DryRun) { $global:AppliedOptions["9"] = $false }; Read-Host " Enter..."
+        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; if (-not $global:DryRun) { $global:AppliedOptions["9"] = $false }
     }
 }
 
@@ -485,10 +481,10 @@ function Limpeza-Total {
         Write-Progress -Activity "Limpeza de Sistema" -Status "Ajustando Prefetch..." -PercentComplete 90
         Set-Reg "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" "EnablePrefetcher" 0
         Write-Progress -Activity "Limpeza de Sistema" -Completed
-        Write-Host " [OK] Sistema Limpo!" -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["10"] = $true }; Read-Host " Enter..."
+        Write-Host " [OK] Sistema Limpo!" -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["10"] = $true }
     } elseif ($sub -eq "2") {
         Set-Reg "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" "EnablePrefetcher" 3
-        Write-Host " [OK] Prefetch Reativado." -ForegroundColor DarkGray; if (-not $global:DryRun) { $global:AppliedOptions["10"] = $false }; Read-Host " Enter..."
+        Write-Host " [OK] Prefetch Reativado." -ForegroundColor DarkGray; if (-not $global:DryRun) { $global:AppliedOptions["10"] = $false }
     }
 }
 
@@ -514,7 +510,7 @@ function Menu-Diagnosis {
             if ($global:DryRun) { Write-Host " [SIMULACAO] Pararia servico de log: $s" -ForegroundColor Cyan; continue }
             Stop-Service $s -Force -ErrorAction SilentlyContinue; Set-Service $s -StartupType Disabled -ErrorAction SilentlyContinue 
         }
-        Write-Host " [OK] Desativado." -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["11"] = $true }; Read-Host " Enter..."
+        Write-Host " [OK] Desativado." -ForegroundColor Green; if (-not $global:DryRun) { $global:AppliedOptions["11"] = $true }
     } elseif ($sub -eq "2") {
         Write-Log "Reativando Diagnostico."
         foreach ($nome in $tarefasAlvo) { 
@@ -525,7 +521,7 @@ function Menu-Diagnosis {
             Set-Service "DPS" -StartupType Automatic -ErrorAction SilentlyContinue; Start-Service "DPS" -ErrorAction SilentlyContinue
             Set-Service "WdiServiceHost" -StartupType Manual -ErrorAction SilentlyContinue
         }
-        Write-Host " [OK] Reativado." -ForegroundColor DarkGray; if (-not $global:DryRun) { $global:AppliedOptions["11"] = $false }; Read-Host " Enter..."
+        Write-Host " [OK] Reativado." -ForegroundColor DarkGray; if (-not $global:DryRun) { $global:AppliedOptions["11"] = $false }
     }
 }
 
@@ -545,7 +541,7 @@ function Verificar-Sistema {
         Write-Progress -Activity "Seguranca e Reparo" -Status "Reparando Imagem (DISM)..." -PercentComplete 75
         Write-Host " [-] Reparando Imagem (DISM)..." -ForegroundColor Yellow; Start-Process "dism.exe" "/online /cleanup-image /restorehealth" -Wait -NoNewWindow
         Write-Progress -Activity "Seguranca e Reparo" -Completed
-        Write-Host " [OK] Concluido." -ForegroundColor Green; $global:AppliedOptions["12"] = $true; Read-Host " Enter..."
+        Write-Host " [OK] Concluido." -ForegroundColor Green; $global:AppliedOptions["12"] = $true
     }
 }
 
@@ -561,13 +557,13 @@ function Disable-HPET {
         if ($global:DryRun) { Write-Host " [SIMULACAO] Desabilitaria HPET e platformclock." -ForegroundColor Cyan; Read-Host " Enter..."; return }
         Get-PnpDevice | Where-Object { $_.FriendlyName -match "High precision event timer" } | Disable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue
         bcdedit /deletevalue useplatformclock | Out-Null; bcdedit /set disabledynamictick yes | Out-Null
-        Write-Host " [OK] Desativado." -ForegroundColor Green; $global:AppliedOptions["13"] = $true; Read-Host " Enter..."
+        Write-Host " [OK] Desativado." -ForegroundColor Green; $global:AppliedOptions["13"] = $true
     } elseif ($sub -eq "2") {
         Write-Log "Reativando HPET."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Reabilitaria HPET." -ForegroundColor Cyan; Read-Host " Enter..."; return }
         Get-PnpDevice | Where-Object { $_.FriendlyName -match "High precision event timer" } | Enable-PnpDevice -Confirm:$false -ErrorAction SilentlyContinue
         bcdedit /set useplatformclock yes | Out-Null; bcdedit /set disabledynamictick no | Out-Null
-        Write-Host " [OK] Reativado." -ForegroundColor DarkGray; $global:AppliedOptions["13"] = $false; Read-Host " Enter..."
+        Write-Host " [OK] Reativado." -ForegroundColor DarkGray; $global:AppliedOptions["13"] = $false
     }
 }
 
@@ -590,7 +586,6 @@ function Teste-Internet {
                 winget install -e --id Ookla.Speedtest.CLI --accept-source-agreements --accept-package-agreements
             }
         }
-        Read-Host " Enter..."
     }
 }
 
@@ -604,12 +599,12 @@ function Boot-Rapido {
     if ($sub -eq "1") {
         Write-Log "Ativando Boot Rapido (StartupDelayInMSec = 0)."
         Set-Reg "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" "StartupDelayInMSec" 0
-        Write-Host " [OK] Ativado." -ForegroundColor Green; $global:AppliedOptions["15"] = $true; Read-Host " Enter..."
+        Write-Host " [OK] Ativado." -ForegroundColor Green; $global:AppliedOptions["15"] = $true
     } elseif ($sub -eq "2") {
         Write-Log "Revertendo Boot Rapido."
         if ($global:DryRun) { Write-Host " [SIMULACAO] Removeria chave Serialize." -ForegroundColor Cyan; Read-Host " Enter..."; return }
         Remove-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" "StartupDelayInMSec" -ErrorAction SilentlyContinue
-        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["15"] = $false; Read-Host " Enter..."
+        Write-Host " [OK] Revertido." -ForegroundColor DarkGray; $global:AppliedOptions["15"] = $false
     }
 }
 
@@ -680,7 +675,6 @@ function Menu-Scanner {
         Write-Log "System Scanner executado - Erros encontrados."
         Write-Host ""
     }
-    Read-Host " Enter..."
 }
 
 function Menu-BackupFiles {
@@ -729,7 +723,6 @@ function Menu-BackupFiles {
     Write-Host ""
     Write-Host " [OK] Backup Concluido na Area de Trabalho!" -ForegroundColor Green
     $global:AppliedOptions["17"] = $true
-    Read-Host " Enter..."
 }
 
 function Menu-WifiKeys {
@@ -761,7 +754,6 @@ function Menu-WifiKeys {
         }
     }
     Write-Host ""
-    Read-Host " Enter..."
 }
 
 function Menu-RegeditUltimate {
@@ -826,7 +818,6 @@ function Menu-RegeditUltimate {
         $global:AppliedOptions["19"] = $false
     }
     Write-Host " [!] Reinicie o computador para aplicar." -ForegroundColor DarkGray
-    Read-Host " Enter..."
 }
 
 function Menu-PrioridadeProcesso {
@@ -864,7 +855,6 @@ function Menu-PrioridadeProcesso {
             }
         }
     }
-    Read-Host " Enter..."
 }
 
 function Menu-DiscoSMART {
@@ -928,7 +918,6 @@ function Menu-DiscoSMART {
     Write-Host ""
     Write-Log "Diagnostico SMART executado."
     $global:AppliedOptions["21"] = $true
-    Read-Host " Enter..."
 }
 
 function Menu-TesteRAM {
@@ -1023,7 +1012,6 @@ function Menu-RelatorioHardware {
         Write-Host " [X] ERRO ao gerar relatorio: $_" -ForegroundColor Red
         Write-Log "Erro ao gerar Relatorio de Hardware: $_" "ERRO"
     }
-    Read-Host " Enter..."
 }
 
 function Menu-TesteEstabilidade {
@@ -1103,7 +1091,6 @@ function Menu-TesteEstabilidade {
         Write-Log "Teste de Estabilidade concluido sem abortar."
         $global:AppliedOptions["26"] = $true
     }
-    Read-Host " Enter..."
 }
 
 function Menu-ExportarSessao {
@@ -1148,7 +1135,6 @@ function Menu-ExportarSessao {
         Write-Host " [X] ERRO ao exportar relatorio: $_" -ForegroundColor Red
         Write-Log "Erro ao exportar relatorio de sessao: $_" "ERRO"
     }
-    Read-Host " Enter..."
 }
 
 function Quick-Optimize {
@@ -1170,7 +1156,7 @@ function Quick-Optimize {
     if ($conf -notmatch "^[sS]") { Write-Host " [!] Cancelado pelo usuario." -ForegroundColor Yellow; Start-Sleep -s 1; return }
 
     Write-Host "`n [99] QUICK OPTIMIZE INICIADO..." -ForegroundColor Magenta
-    Write-Host " [i] Cada modulo abaixo ainda pedira Enter/escolha uma vez (limitacao do menu atual)." -ForegroundColor DarkGray
+    Write-Host " [i] Cada modulo ainda vai pedir a escolha [1/2/0] uma vez; a pausa de Enter entre eles foi removida." -ForegroundColor DarkGray
     Write-Log "Quick Optimize acionado pelo usuario."
     Menu-Restauracao
     Menu-Visual
@@ -1179,7 +1165,6 @@ function Quick-Optimize {
     Boot-Rapido
     Limpeza-Total
     Write-Host "`n [!] QUICK OPTIMIZE CONCLUIDO COM SUCESSO." -ForegroundColor Magenta
-    Read-Host " Enter..."
 }
 
 # --- FUNCAO SECRETA DE NOTAS (COM CODIFICACAO BASE64 + ADS) ---
@@ -1312,15 +1297,26 @@ Do {
     Draw-Line
     Write-Host ""
     
-    Write-MenuRow "[1] Criar Ponto Restauracao" "[8] Otimizar Rede (Ping)"     "[15] Boot Rapido"
-    Write-MenuRow "[2] Desativar Servicos"      "[9] Perifericos (Input Lag)"  "[16] System Scanner"
-    Write-MenuRow "[3] Otimizar Visual (FPS)"   "[10] Limpeza Profunda"        "[17] Backup Pessoal"
-    Write-MenuRow "[4] Privacidade e GPO"       "[11] Desativar Diagnosis"     "[18] Wi-Fi Keys"
-    Write-MenuRow "[5] Debloat (Apps)"          "[12] Seguranca e Reparo"      "[19] Regedit (Avancado)"
-    Write-MenuRow "[6] Atualizar (Winget)"      "[13] Desativar HPET"          "[20] Prioridade Processo"
-    Write-MenuRow "[7] Energia e SSD"           "[14] Teste Speedtest"         "[21] Disco (SMART)"
-    Write-MenuRow "[22] Teste de RAM"           "[24] Relatorio Hardware"      "[26] Teste Estabilidade"
-    Write-MenuRow "[28] Exportar Sessao"        ""                             ""
+    Write-Host ""
+    Write-Host "  -- DESEMPENHO -------------------------------------------------------------" -ForegroundColor DarkGreen
+    Write-MenuRow "[3] Otimizar Visual (FPS)"   "[7] Energia e SSD"            "[9] Perifericos (Input Lag)"
+    Write-MenuRow "[13] Desativar HPET"         "[15] Boot Rapido"             "[20] Prioridade Processo"
+    Write-MenuRow "[26] Teste Estabilidade"     ""                             ""
+
+    Write-Host ""
+    Write-Host "  -- REDE -------------------------------------------------------------------" -ForegroundColor DarkGreen
+    Write-MenuRow "[8] Otimizar Rede (Ping)"    "[14] Teste Speedtest"         "[18] Wi-Fi Keys"
+
+    Write-Host ""
+    Write-Host "  -- MANUTENCAO & DIAGNOSTICO -----------------------------------------------" -ForegroundColor DarkGreen
+    Write-MenuRow "[5] Debloat (Apps)"          "[6] Atualizar (Winget)"       "[10] Limpeza Profunda"
+    Write-MenuRow "[12] Seguranca e Reparo"     "[16] System Scanner"          "[17] Backup Pessoal"
+    Write-MenuRow "[21] Disco (SMART)"          "[22] Teste de RAM"            "[24] Relatorio Hardware"
+
+    Write-Host ""
+    Write-Host "  -- SISTEMA & AVANCADO -----------------------------------------------------" -ForegroundColor DarkGreen
+    Write-MenuRow "[1] Criar Ponto Restauracao" "[2] Desativar Servicos"       "[4] Privacidade e GPO"
+    Write-MenuRow "[11] Desativar Diagnosis"    "[19] Regedit (Avancado)"      "[28] Exportar Sessao"
     
     Write-Host ""
     Write-Host "  $([char]27)[32m[$([char]27)[97mi$([char]27)[32m] $([char]27)[92mSobre   $([char]27)[32m[$([char]27)[97mL$([char]27)[32m] $([char]27)[92mLogs   $([char]27)[32m[$([char]27)[97mD$([char]27)[32m] $([char]27)[92mDry-Run   $([char]27)[32m[$([char]27)[97m99$([char]27)[32m] $([char]27)[92mQUICK OPTIMIZE   $([char]27)[32m[$([char]27)[97m0$([char]27)[32m] $([char]27)[92mSair"
@@ -1392,7 +1388,12 @@ Do {
             Default { if ($choice -ne "") { Write-Log "Comando ignorado: $choice" } }
         }
     }
-    if (-not $global:ExitScript -and $rawChoice -ne "") {
+    $SemPromptDuplo = @("i", "l", "d", "0", "nota")
+    $PrecisaPrompt = $true
+    foreach ($c2 in $choices) {
+        if ($SemPromptDuplo -contains $c2.Trim().ToLower()) { $PrecisaPrompt = $false; break }
+    }
+    if (-not $global:ExitScript -and $rawChoice -ne "" -and $PrecisaPrompt) {
         Read-Host "`n Pressione ENTER para voltar ao menu principal..."
     }
 } While (-not $global:ExitScript)
