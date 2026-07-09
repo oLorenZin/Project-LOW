@@ -1297,13 +1297,13 @@ Do {
     Draw-Line
     Write-Host ""
 
-    Write-MenuRow "[1] Criar Ponto Restauracao" "[8] Otimizar Rede (Ping)"     "[15] Boot Rapido"
-    Write-MenuRow "[2] Desativar Servicos"      "[9] Perifericos (Input Lag)"  "[16] System Scanner"
-    Write-MenuRow "[3] Otimizar Visual (FPS)"   "[10] Limpeza Profunda"        "[17] Backup Pessoal"
-    Write-MenuRow "[4] Privacidade e GPO"       "[11] Desativar Diagnosis"     "[18] Wi-Fi Keys"
-    Write-MenuRow "[5] Debloat (Apps)"          "[12] Seguranca e Reparo"      "[19] Regedit (Avancado)"
-    Write-MenuRow "[6] Atualizar (Winget)"      "[13] Desativar HPET"          "[20] Prioridade Processo"
-    Write-MenuRow "[7] Energia e SSD"           "[14] Teste Speedtest"         "[21] Disco (SMART)"
+    Write-MenuRow "[1] Criar Ponto Restauracao" "[2] Desativar Servicos"       "[3] Otimizar Visual (FPS)"
+    Write-MenuRow "[4] Privacidade e GPO"       "[5] Debloat (Apps)"           "[6] Atualizar (Winget)"
+    Write-MenuRow "[7] Energia e SSD"           "[8] Otimizar Rede (Ping)"     "[9] Perifericos (Input Lag)"
+    Write-MenuRow "[10] Limpeza Profunda"       "[11] Desativar Diagnosis"     "[12] Seguranca e Reparo"
+    Write-MenuRow "[13] Desativar HPET"         "[14] Teste Speedtest"         "[15] Boot Rapido"
+    Write-MenuRow "[16] System Scanner"         "[17] Backup Pessoal"          "[18] Wi-Fi Keys"
+    Write-MenuRow "[19] Regedit (Avancado)"     "[20] Prioridade Processo"     "[21] Disco (SMART)"
     Write-MenuRow "[22] Teste de RAM"           "[24] Relatorio Hardware"      "[26] Teste Estabilidade"
     Write-MenuRow "[28] Exportar Sessao"        ""                             ""
 
