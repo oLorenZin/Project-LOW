@@ -941,7 +941,7 @@ function Menu-TesteRAM {
 }
 
 function Menu-RelatorioHardware {
-    Write-Host "`n [24] RELATORIO DE HARDWARE COMPLETO" -ForegroundColor Green
+    Write-Host "`n [23] RELATORIO DE HARDWARE COMPLETO" -ForegroundColor Green
     Write-Info "Exporta CPU, RAM, GPU, Discos e Placa-Mae para um arquivo .txt." "msinfo32 / Get-CimInstance"
     Write-Host "      [1] Gerar Relatorio" -ForegroundColor White
     Write-Host "      [0] Voltar" -ForegroundColor Gray
@@ -1005,7 +1005,7 @@ function Menu-RelatorioHardware {
 
         Write-Progress -Activity "Relatorio de Hardware" -Completed
         Write-Host " [OK] Relatorio salvo em: $ArquivoSaida" -ForegroundColor Green
-        $global:AppliedOptions["24"] = $true
+        $global:AppliedOptions["23"] = $true
         Write-Log "Relatorio de Hardware gerado: $ArquivoSaida"
     } Catch {
         Write-Progress -Activity "Relatorio de Hardware" -Completed
@@ -1015,7 +1015,7 @@ function Menu-RelatorioHardware {
 }
 
 function Menu-TesteEstabilidade {
-    Write-Host "`n [26] TESTE DE ESTABILIDADE RAPIDO" -ForegroundColor Green
+    Write-Host "`n [24] TESTE DE ESTABILIDADE RAPIDO" -ForegroundColor Green
     Write-Info "Estressa a CPU por 30s e monitora temperatura/throttling." "Prime95 / OCCT (ferramentas dedicadas)"
     Write-Host " [!] ATENCAO: Isso vai aumentar a temperatura da CPU temporariamente." -ForegroundColor Yellow
     Write-Host " [!] Nao recomendado logo apos trocar pasta termica (aguarde a cura, ~24h)." -ForegroundColor Yellow
@@ -1089,12 +1089,12 @@ function Menu-TesteEstabilidade {
         Write-Host ""
         Write-Host " [OK] Teste concluido sem atingir o limite de seguranca." -ForegroundColor Green
         Write-Log "Teste de Estabilidade concluido sem abortar."
-        $global:AppliedOptions["26"] = $true
+        $global:AppliedOptions["24"] = $true
     }
 }
 
 function Menu-ExportarSessao {
-    Write-Host "`n [28] EXPORTAR RELATORIO DA SESSAO" -ForegroundColor Green
+    Write-Host "`n [25] EXPORTAR RELATORIO DA SESSAO" -ForegroundColor Green
     Write-Info "Salva todos os logs desta sessao em um arquivo .txt." "Copiar manualmente do [L] Logs"
     Write-Host "      [1] Exportar Agora" -ForegroundColor White
     Write-Host "      [0] Voltar" -ForegroundColor Gray
@@ -1130,7 +1130,7 @@ function Menu-ExportarSessao {
 
         Write-Host " [OK] Relatorio de sessao salvo em: $ArquivoSaida" -ForegroundColor Green
         Write-Log "Relatorio de Sessao exportado: $ArquivoSaida"
-        $global:AppliedOptions["28"] = $true
+        $global:AppliedOptions["25"] = $true
     } Catch {
         Write-Host " [X] ERRO ao exportar relatorio: $_" -ForegroundColor Red
         Write-Log "Erro ao exportar relatorio de sessao: $_" "ERRO"
@@ -1304,8 +1304,8 @@ Do {
     Write-MenuRow "[13] Desativar HPET"         "[14] Teste Speedtest"         "[15] Boot Rapido"
     Write-MenuRow "[16] System Scanner"         "[17] Backup Pessoal"          "[18] Wi-Fi Keys"
     Write-MenuRow "[19] Regedit (Avancado)"     "[20] Prioridade Processo"     "[21] Disco (SMART)"
-    Write-MenuRow "[22] Teste de RAM"           "[24] Relatorio Hardware"      "[26] Teste Estabilidade"
-    Write-MenuRow "[28] Exportar Sessao"        ""                             ""
+    Write-MenuRow "[22] Teste de RAM"           "[23] Relatorio Hardware"      "[24] Teste Estabilidade"
+    Write-MenuRow "[25] Exportar Sessao"        ""                             ""
 
     Write-Host ""
     Write-Host "  $([char]27)[32m[$([char]27)[97mi$([char]27)[32m] $([char]27)[92mSobre   $([char]27)[32m[$([char]27)[97mL$([char]27)[32m] $([char]27)[92mLogs   $([char]27)[32m[$([char]27)[97mD$([char]27)[32m] $([char]27)[92mDry-Run   $([char]27)[32m[$([char]27)[97m99$([char]27)[32m] $([char]27)[92mQUICK OPTIMIZE   $([char]27)[32m[$([char]27)[97m0$([char]27)[32m] $([char]27)[92mSair"
@@ -1340,9 +1340,9 @@ Do {
             "20" { Menu-PrioridadeProcesso }
             "21" { Menu-DiscoSMART }
             "22" { Menu-TesteRAM }
-            "24" { Menu-RelatorioHardware }
-            "26" { Menu-TesteEstabilidade }
-            "28" { Menu-ExportarSessao }
+            "23" { Menu-RelatorioHardware }
+            "24" { Menu-TesteEstabilidade }
+            "25" { Menu-ExportarSessao }
             "99" { Quick-Optimize }
             "nota" { Menu-NotasSecretas }
             "i" { Menu-Info }
